@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code · Quick Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #132236;
+    --navy-light: #1e3352;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --slate: #8fa3b8;
+    --white: #f0f4f8;
+    --white-dim: #b8cad9;
+    --green: #4caf82;
+    --cyan: #4ab8c4;
+    --red: #e06b6b;
+    --radius: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 28px 32px;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--gold);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .header-left { display: flex; align-items: baseline; gap: 14px; }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gold-light);
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: var(--navy-light);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+  }
+  .card.green::before  { background: var(--green); }
+  .card.cyan::before   { background: var(--cyan); }
+  .card.red::before    { background: var(--red); }
+  .card.slate::before  { background: var(--slate); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .card.green  .card-title { color: var(--green); }
+  .card.cyan   .card-title { color: var(--cyan); }
+  .card.red    .card-title { color: var(--red); }
+  .card.slate  .card-title { color: var(--slate); }
+
+  /* ── COMMAND ROWS ── */
+  .cmd-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+  }
+  .cmd-row:last-child { border-bottom: none; }
+  .cmd-row:hover .code { background: var(--navy-light); color: var(--gold-light); }
+
+  .code {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    background: rgba(255,255,255,0.05);
+    color: var(--white);
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+    user-select: all;
+  }
+
+  .desc {
+    color: var(--white-dim);
+    font-size: 11.5px;
+    line-height: 1.4;
+    padding-top: 2px;
+  }
+
+  /* ── TIPS ROW ── */
+  .tips-row {
+    margin-top: 14px;
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-light);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-left: 3px solid var(--gold);
+  }
+  .tip-group { display: flex; align-items: center; gap: 8px; }
+  .tip-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .tip-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--white-dim);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--slate);
+    opacity: 0.6;
+  }
+  .copy-tip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    opacity: 0.7;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo">Claude Code</div>
+    <div class="subtitle">Quick Reference · G. Wright</div>
+  </div>
+  <div class="badge">CLI COMMANDS &amp; FLAGS</div>
+</div>
+
+<div class="grid">
+
+  <!-- SESSION MANAGEMENT -->
+  <div class="card">
+    <div class="card-title">Session Management</div>
+    <div class="cmd-row">
+      <span class="code">claude</span>
+      <span class="desc">Start a new interactive session</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude "query"</span>
+      <span class="desc">Start session with an opening prompt</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude -c</span>
+      <span class="desc">Continue the most recent session in this dir</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude -r "name"</span>
+      <span class="desc">Resume a named session (e.g. "outreach-py")</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude -n "name"</span>
+      <span class="desc">Name a new session for easy resume later</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --resume</span>
+      <span class="desc">Interactive picker to choose a past session</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --fork-session</span>
+      <span class="desc">Resume but create a new session ID (safe branch)</span>
+    </div>
+  </div>
+
+  <!-- SCRIPTING & AUTOMATION -->
+  <div class="card green">
+    <div class="card-title">Scripting &amp; Automation</div>
+    <div class="cmd-row">
+      <span class="code">claude -p "query"</span>
+      <span class="desc">Print mode: run query, output result, then exit</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">cat file | claude -p "query"</span>
+      <span class="desc">Pipe file content into Claude (great for logs)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude -c -p "query"</span>
+      <span class="desc">Continue last session in print/headless mode</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--output-format json</span>
+      <span class="desc">Return structured JSON output (for pipelines)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--max-turns 3</span>
+      <span class="desc">Limit agentic turns (prevents runaway loops)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--max-budget-usd 2.00</span>
+      <span class="desc">Cap API spend per run (print mode only)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--bare -p "query"</span>
+      <span class="desc">Minimal fast mode — skips MCP, plugins, memory</span>
+    </div>
+  </div>
+
+  <!-- PYTHON PROJECTS -->
+  <div class="card cyan">
+    <div class="card-title">Python Project Workflows</div>
+    <div class="cmd-row">
+      <span class="code">claude --add-dir ../lib</span>
+      <span class="desc">Add extra dirs Claude can read (e.g. shared utils)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --tools "Bash,Edit,Read"</span>
+      <span class="desc">Restrict tools to safe set for code editing</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --verbose</span>
+      <span class="desc">Show full turn-by-turn output for debugging</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --debug "api"</span>
+      <span class="desc">Debug API calls only (filter by category)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude -w feature-name</span>
+      <span class="desc">Isolated git worktree session (parallel work)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --effort high</span>
+      <span class="desc">Increase reasoning effort for complex logic</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude --model claude-sonnet-4-6</span>
+      <span class="desc">Set model explicitly for session</span>
+    </div>
+  </div>
+
+  <!-- SYSTEM PROMPT CONTROL -->
+  <div class="card slate">
+    <div class="card-title">System Prompt Control</div>
+    <div class="cmd-row">
+      <span class="code">--append-system-prompt "text"</span>
+      <span class="desc">Add rules on top of defaults (safest option)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--append-system-prompt-file ./rules.txt</span>
+      <span class="desc">Load custom rules from file (e.g. style guide)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--system-prompt "text"</span>
+      <span class="desc">Replace entire system prompt (full control)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--system-prompt-file ./prompt.txt</span>
+      <span class="desc">Load replacement prompt from file</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--settings ./settings.json</span>
+      <span class="desc">Load custom settings from a JSON file</span>
+    </div>
+  </div>
+
+  <!-- PERMISSIONS & SAFETY -->
+  <div class="card red">
+    <div class="card-title">Permissions &amp; Safety</div>
+    <div class="cmd-row">
+      <span class="code">--permission-mode plan</span>
+      <span class="desc">Plan-only mode, no writes — safe review pass</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--allowedTools "Bash(git log *)"</span>
+      <span class="desc">Pre-approve specific tool patterns (no prompt)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--disallowedTools "Edit"</span>
+      <span class="desc">Block specific tools from being used at all</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--dangerously-skip-permissions</span>
+      <span class="desc">Skip all prompts (automation only — use carefully)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--no-session-persistence</span>
+      <span class="desc">Run without saving session to disk</span>
+    </div>
+  </div>
+
+  <!-- MCP & INTEGRATIONS -->
+  <div class="card">
+    <div class="card-title">MCP &amp; Auth</div>
+    <div class="cmd-row">
+      <span class="code">claude mcp</span>
+      <span class="desc">Configure MCP servers (n8n, custom tools)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--mcp-config ./mcp.json</span>
+      <span class="desc">Load MCP servers from a JSON config file</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">--strict-mcp-config</span>
+      <span class="desc">Only use MCP servers from --mcp-config file</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude auth login</span>
+      <span class="desc">Sign in to Anthropic account</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude auth login --console</span>
+      <span class="desc">Login via Console (API key billing)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude auth status</span>
+      <span class="desc">Check auth status (exits 0=logged in, 1=not)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="code">claude update</span>
+      <span class="desc">Update Claude Code to the latest version</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- TIPS ROW -->
+<div class="tips-row">
+  <div class="tip-group">
+    <span class="tip-label">Outreach Scripts</span>
+    <span class="tip-value">cd JobOpsOutreach &amp;&amp; claude -n "outreach-session"</span>
+  </div>
+  <div class="tip-group">
+    <span class="tip-label">Resume a Named Session</span>
+    <span class="tip-value">claude -r "session-name" "pick up where we left off"</span>
+  </div>
+  <div class="tip-group">
+    <span class="tip-label">Safe Code Review</span>
+    <span class="tip-value">claude --permission-mode plan "review outreach.py for bugs"</span>
+  </div>
+  <div class="tip-group">
+    <span class="tip-label">Pipe a Log File</span>
+    <span class="tip-value">cat error.log | claude -p "what failed and why"</span>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-note">Claude Code CLI · docs.claude.ai · G. Wright Personal Dashboard</div>
+  <div class="copy-tip">click any command to select &amp; copy</div>
+</div>
+
+</body>
+</html>
